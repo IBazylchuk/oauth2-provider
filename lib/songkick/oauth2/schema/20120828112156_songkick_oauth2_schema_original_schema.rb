@@ -1,5 +1,8 @@
 class SongkickOauth2SchemaOriginalSchema < ActiveRecord::Migration
-  INDEX_NAME = 'index_owner_client_tokens'
+  INDEX_NAME1 = 'index_owner_client_tokens1'
+  INDEX_NAME2 = 'index_owner_client_tokens2'
+  INDEX_NAME3 = 'index_owner_client_tokens3'
+  INDEX_NAME4 = 'index_owner_client_tokens4'
   def self.up
     create_table :oauth2_clients do |t|
       t.timestamps
@@ -23,10 +26,10 @@ class SongkickOauth2SchemaOriginalSchema < ActiveRecord::Migration
       t.string     :refresh_token_hash, :limit => 40
       t.datetime   :expires_at
     end
-    add_index :oauth2_authorizations, [:client_id, :code], :name => INDEX_NAME
-    add_index :oauth2_authorizations, [:access_token_hash], :name => INDEX_NAME
-    add_index :oauth2_authorizations, [:client_id, :access_token_hash], :name => INDEX_NAME
-    add_index :oauth2_authorizations, [:client_id, :refresh_token_hash], :name => INDEX_NAME
+    add_index :oauth2_authorizations, [:client_id, :code], :name => INDEX_NAME1
+    add_index :oauth2_authorizations, [:access_token_hash], :name => INDEX_NAME2
+    add_index :oauth2_authorizations, [:client_id, :access_token_hash], :name => INDEX_NAME3
+    add_index :oauth2_authorizations, [:client_id, :refresh_token_hash], :name => INDEX_NAME4
   end
 
   def self.down
