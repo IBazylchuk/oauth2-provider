@@ -1,27 +1,33 @@
 class SongkickOauth2SchemaAddUniqueIndexes < ActiveRecord::Migration
-  FIELDS = [:code, :refresh_token_hash]
+  INDEX_NAME1 = 'client_id_code_index'
+  INDEX_NAME2 = 'access_token_hash_index'
+  INDEX_NAME4 = 'client_id_refresh_token_hash_index'
 
   def self.up
-    FIELDS.each do |field|
-      remove_index :oauth2_authorizations, [:client_id, field]
-      add_index :oauth2_authorizations, [:client_id, field], :unique => true
-    end
-    remove_index :oauth2_authorizations, [:access_token_hash]
-    add_index :oauth2_authorizations, [:access_token_hash], :unique => true
+    remove_index :oauth2_authorizations, name: INDEX_NAME1
+    add_index :oauth2_authorizations, [:client_id, :code], name: INDEX_NAME1, unique: true
+
+    remove_index :oauth2_authorizations, name: INDEX_NAME4
+    add_index :oauth2_authorizations, [:client_id, :refresh_token_hash], name: INDEX_NAME4, unique: true
+
+    remove_index :oauth2_authorizations, name: INDEX_NAME2
+    add_index :oauth2_authorizations, [:access_token_hash], name: INDEX_NAME2, unique: true
 
     remove_index :oauth2_clients, [:client_id]
-    add_index :oauth2_clients, [:client_id], :unique => true
+    add_index :oauth2_clients, [:client_id], unique: true
 
-    add_index :oauth2_clients, [:name], :unique => true
+    add_index :oauth2_clients, [:name], unique: true
   end
 
   def self.down
-    FIELDS.each do |field|
-      remove_index :oauth2_authorizations, [:client_id, field]
-      add_index :oauth2_authorizations, [:client_id, field]
-    end
-    remove_index :oauth2_authorizations, [:access_token_hash]
-    add_index :oauth2_authorizations, [:access_token_hash]
+    remove_index :oauth2_authorizations, name: INDEX_NAME1
+    add_index :oauth2_authorizations, [:client_id, :code], name: INDEX_NAME1
+
+    remove_index :oauth2_authorizations, name: INDEX_NAME4
+    add_index :oauth2_authorizations, [:client_id, :refresh_token_hash], name: INDEX_NAME4
+
+    remove_index :oauth2_authorizations, name: INDEX_NAME2
+    add_index :oauth2_authorizations, [:access_token_hash], name: INDEX_NAME2
 
     remove_index :oauth2_clients, [:client_id]
     add_index :oauth2_clients, [:client_id]
@@ -29,4 +35,3 @@ class SongkickOauth2SchemaAddUniqueIndexes < ActiveRecord::Migration
     remove_index :oauth2_clients, [:name]
   end
 end
-
